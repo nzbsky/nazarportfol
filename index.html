@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Назар | Frontend Developer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to top, var(--bg), transparent);
+            z-index: 1;
+        }
+        
+        .hero {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .profile-img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--primary);
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, var(--primary), #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.8rem 1.8rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        section {
+            padding: 6rem 0;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .project-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .project-card:hover .project-img {
+            transform: scale(1.05);
+        }
+        
+        .project-info {
+            padding: 1.5rem;
+        }
+        
+        .project-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .project-description {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+        
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .skill {
+            background: var(--card-bg);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            background: var(--card-bg);
+            margin-top: 4rem;
+        }
+        
+        .footer-text {
+            color: var(--gray);
+        }
+        
+        /* Анімація фону */
+        .bg-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.15;
+        }
+        
+        .circle-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: -100px;
+            left: -100px;
+            animation: float 8s infinite ease-in-out;
+        }
+        
+        .circle-2 {
+            width: 300px;
+            height: 300px;
+            background: #a855f7;
+            bottom: -50px;
+            right: -50px;
+            animation: float 10s infinite ease-in-out reverse;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 30px); }
+        }
+        
+        /* Адаптивність */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            section {
+                padding: 4rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="bg-animation">
+            <div class="bg-circle circle-1"></div>
+            <div class="bg-circle circle-2"></div>
+        </div>
+        
+        <div class="container">
+            <div class="hero">
+                <img src="./myfoto.jpg" alt="Назар" class="profile-img">
+                <h1>Назар</h1>
+                <p class="tagline">Frontend Developer | UI/UX Enthusiast</p>
+                <p>15 років | Працюю з Figma, HTML, CSS, JavaScript</p>
+                
+                <div class="social-links">
+                    <a href="https://t.me/nzbsky" class="btn">
+                        <i class="fab fa-telegram"></i> Telegram
+                    </a>
+                    <a href="https://github.com/nzbsky" class="btn btn-outline">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                    <a href="https://www.instagram.com/nazzar2010/" class="btn">
+                        <i class="fas fa-globe"></i>Instagram
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title">Про мене</h2>
+            <div style="max-width: 800px; margin: 0 auto;">
+                <p style="margin-bottom: 1.5rem; font-size: 1.1rem;">
+                    Привіт! Я Назар, мені 15 років і я фронтенд розробник з України. 
+                    Захоплююсь створенням сучасних веб-інтерфейсів та дизайном.
+                </p>
+                <p style="margin-bottom: 1.5rem; font-size: 1.1rem;">
+                    Почав свій шлях у програмуванні з візуального дизайну у Figma, 
+                    що допомагає мені створювати не лише функціональні, а й естетичні сайти.
+                </p>
+                <p style="font-size: 1.1rem;">
+                    Мій перший проект - <a href="https://cozyhouse-slavsko.com" style="color: var(--primary); text-decoration: none;">cozyhouse-slavsko.com</a>, 
+                    який я розробив повністю самостійно, від дизайну до реалізації.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="projects">
+        <div class="container">
+            <h2 class="section-title">Мої проекти</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                   
+                    <div class="project-info">
+                        <h3 class="project-title">Cozy House Slavsko</h3>
+                        <p class="project-description">Сайт для будинку відпочинку у Славську з адаптивним дизайном та простою навігацією.</p>
+                        <div class="project-links">
+                            <a href="https://cozyhouse-slavsko.com" class="btn">Live Demo</a>
+                            <a href="#" class="btn btn-outline">Code</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                   
+                    <div class="project-info">
+                        <h3 class="project-title">Портфоліо (цей сайт)</h3>
+                        <p class="project-description">Сучасне портфоліо з анімаціями та темною темою.</p>
+                        <div class="project-links">
+                            <a href="#" class="btn">Live Demo</a>
+                            <a href="#" class="btn btn-outline">Code</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                  
+                    <div class="project-info">
+                        <h3 class="project-title">Новий проект</h3>
+                        <p class="project-description">Тут скоро з'явиться опис мого нового проекту.</p>
+                        <div class="project-links">
+                            <a href="#" class="btn btn-outline">Скоро</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="skills">
+        <div class="container">
+            <h2 class="section-title">Навички</h2>
+            <div class="skills-container">
+                <div class="skill">
+                    <i class="fab fa-figma"></i> Figma
+                </div>
+                <div class="skill">
+                    <i class="fab fa-html5"></i> HTML5
+                </div>
+                <div class="skill">
+                    <i class="fab fa-css3-alt"></i> CSS3
+                </div>
+                <div class="skill">
+                    <i class="fab fa-js"></i> JavaScript
+                </div>
+                <div class="skill">
+                    <i class="fas fa-mobile-alt"></i> Адаптивний дизайн
+                </div>
+                <div class="skill">
+                    <i class="fas fa-paint-brush"></i> UI/UX Design
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <p class="footer-text">© 2023 Назар | Frontend Developer</p>
+            <p class="footer-text" style="margin-top: 1rem;">Зв'яжіться зі мною через соціальні мережі</p>
+        </div>
+    </footer>
+</body>
+</html>
