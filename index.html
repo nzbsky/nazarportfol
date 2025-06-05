@@ -40,6 +40,26 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(0, 15px); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--primary) }
+        }
+        
         .container {
             width: 90%;
             max-width: 1200px;
@@ -120,10 +140,11 @@
                 0 0 30px rgba(99, 102, 241, 0.3),
                 0 0 60px rgba(99, 102, 241, 0.2);
             transition: all 0.3s ease;
+            animation: float 6s ease-in-out infinite;
         }
         
         .profile-img:hover {
-            transform: scale(1.05);
+            animation: pulse 1s ease infinite;
             box-shadow: 
                 0 0 50px rgba(99, 102, 241, 0.5),
                 0 0 80px rgba(99, 102, 241, 0.3);
@@ -147,6 +168,18 @@
             margin-left: auto;
             margin-right: auto;
             font-weight: 500;
+        }
+        
+        .typing-effect {
+            display: inline-block;
+            overflow: hidden;
+            border-right: 3px solid var(--primary);
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: 1px;
+            animation: 
+                typing 3.5s steps(40, end),
+                blink-caret .75s step-end infinite;
         }
         
         .age-info {
@@ -178,12 +211,29 @@
             border: none;
             cursor: pointer;
             font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
         }
         
         .btn:hover {
             background: var(--primary-dark);
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+        
+        .btn:hover::before {
+            left: 100%;
         }
         
         .btn-outline {
@@ -240,10 +290,26 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
         
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), transparent);
+            opacity: 0;
+            transition: 0.5s;
+        }
+        
         .project-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
             border-color: rgba(99, 102, 241, 0.3);
+        }
+        
+        .project-card:hover::before {
+            opacity: 1;
         }
         
         .project-img {
@@ -301,37 +367,40 @@
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             border-color: rgba(99, 102, 241, 0.3);
+            background: var(--primary);
+            color: white;
         }
-
-        /* Education section styles */
-        .education-item {
+        
+        .education {
             background: var(--card-bg);
             border-radius: 12px;
             padding: 2rem;
-            margin-bottom: 2rem;
+            margin-top: 2rem;
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.3s ease;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
-
-        .education-item:hover {
+        
+        .education:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             border-color: rgba(99, 102, 241, 0.3);
         }
         
         .education-title {
             font-size: 1.5rem;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .education-details {
-            font-size: 1.1rem;
-            color: var(--light);
             margin-bottom: 1rem;
+            color: var(--light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-
+        
+        .education-period {
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
         .education-description {
             color: var(--gray);
             line-height: 1.7;
@@ -386,9 +455,22 @@
             animation: float 10s infinite ease-in-out reverse;
         }
         
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(30px, 30px); }
+        /* Particles animation */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
         }
         
         /* Адаптивність */
@@ -430,8 +512,6 @@
     <div class="language-switcher">
         <button class="language-btn active" data-lang="uk">UA</button>
         <button class="language-btn" data-lang="en">EN</button>
-        <button class="language-btn" data-lang="pl">PL</button>
-        <button class="language-btn" data-lang="de">DE</button>
     </div>
     
     <header>
@@ -439,22 +519,23 @@
             <div class="bg-circle circle-1"></div>
             <div class="bg-circle circle-2"></div>
         </div>
+        <div class="particles" id="particles"></div>
         
         <div class="container">
             <div class="hero">
                 <img src="./myfoto.jpg" alt="Назар" class="profile-img">
                 <h1>Назар</h1>
-                <p class="tagline">Frontend Developer | UI/UX Enthusiast</p>
+                <p class="tagline"><span class="typing-effect">Frontend Developer | UI/UX Enthusiast</span></p>
                 <p class="age-info">15 років | Працюю з Figma, HTML, CSS, JavaScript</p>
                 
                 <div class="social-links">
-                    <a href="https://t.me/nzbsky" class="btn" target="_blank" rel="noopener noreferrer">
+                    <a href="https://t.me/nzbsky" class="btn">
                         <i class="fab fa-telegram"></i> Telegram
                     </a>
-                    <a href="https://github.com/nzbsky" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
+                    <a href="https://github.com/nzbsky" class="btn btn-outline">
                         <i class="fab fa-github"></i> GitHub
                     </a>
-                    <a href="https://www.instagram.com/nazzar2010/" class="btn" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.instagram.com/nazzar2010/" class="btn">
                         <i class="fab fa-instagram"></i> Instagram
                     </a>
                 </div>
@@ -464,73 +545,81 @@
     
     <section id="about">
         <div class="container">
-            <h2 class="section-title" data-translate="aboutTitle">Про мене</h2>
+            <h2 class="section-title" data-translate="about_title">Про мене</h2>
             <div style="max-width: 800px; margin: 0 auto;">
-                <p class="about-text" style="margin-bottom: 1.5rem; font-size: 1.1rem;" data-translate="about1">
+                <p class="about-text" style="margin-bottom: 1.5rem; font-size: 1.1rem;" data-translate="about_text1">
                     Привіт! Я Назар, мені 15 років і я фронтенд розробник з України. 
                     Захоплююсь створенням сучасних веб-інтерфейсів та дизайном.
                 </p>
-                <p class="about-text" style="margin-bottom: 1.5rem; font-size: 1.1rem;" data-translate="about2">
-                    Мій шлях у світ програмування розпочався з візуального дизайну у Figma. 
-                    Це дозволяє мені створювати не лише функціональні, а й естетично привабливі сайти, де кожен піксель має значення.
+                <p class="about-text" style="margin-bottom: 1.5rem; font-size: 1.1rem;" data-translate="about_text2">
+                    Почав свій шлях у програмуванні з візуального дизайну у Figma, 
+                    що допомагає мені створювати не лише функціональні, а й естетичні сайти.
                 </p>
-                <p class="about-text" style="font-size: 1.1rem;" data-translate="about3">
-                    Мій перший великий проект - <a href="https://cozyhouse-slavsko.com" style="color: var(--primary); text-decoration: none;" target="_blank" rel="noopener noreferrer">cozyhouse-slavsko.com</a>, 
-                    який я розробив повністю самостійно, від перших ескізів у Figma до фінального коду.
+                <p class="about-text" style="margin-bottom: 1.5rem; font-size: 1.1rem;" data-translate="about_text3">
+                    Мій перший проект - <a href="https://cozyhouse-slavsko.com" style="color: var(--primary); text-decoration: none;">cozyhouse-slavsko.com</a>, 
+                    який я розробив повністю самостійно, від дизайну до реалізації.
+                </p>
+                <p class="about-text" style="font-size: 1.1rem;" data-translate="about_text4">
+                    Зараз активно вивчаю JavaScript та сучасні фреймворки, щоб створювати ще більш динамічні та інтерактивні веб-додатки.
                 </p>
             </div>
         </div>
     </section>
-
+    
     <section id="education">
         <div class="container">
-            <h2 class="section-title" data-translate="educationTitle">Освіта</h2>
-            <div style="max-width: 800px; margin: 0 auto;">
-                <div class="education-item">
-                    <h3 class="education-title" data-translate="goiteensTitle">GoITeens Academy</h3>
-                    <p class="education-details" data-translate="goiteensDetails">2023 - 2024 | Курс "Frontend розробник"</p>
-                    <p class="education-description" data-translate="goiteensDescription">
-                        В GoITeens я здобув глибокі знання з HTML, CSS та JavaScript, навчився працювати з адаптивним дизайном, 
-                        фреймворками та основами UI/UX. Це дало мені міцну базу для створення складних та інтерактивних веб-додатків.
-                        Практичний підхід академії дозволив мені реалізувати кілька цікавих проектів, що зміцнило мої навички.
-                    </p>
-                </div>
+            <h2 class="section-title" data-translate="education_title">Освіта</h2>
+            <div class="education">
+                <h3 class="education-title">
+                    <i class="fas fa-graduation-cap" style="color: var(--primary);"></i>
+                    <span data-translate="education_school">GoITeens - Школа програмування для підлітків</span>
+                </h3>
+                <p class="education-period" data-translate="education_period">2022 - 2023 | Frontend Development</p>
+                <p class="education-description" data-translate="education_description">
+                    Під час навчання в GoITeens я освоїв основи веб-розробки, включаючи HTML, CSS та JavaScript. 
+                    Навчався створювати сучасні, адаптивні сайти та працювати з Git. 
+                    У рамках курсів виконав кілька практичних проектів, які допомогли закріпити отримані знання.
+                </p>
             </div>
         </div>
     </section>
     
     <section id="projects">
         <div class="container">
-            <h2 class="section-title" data-translate="projectsTitle">Мої проекти</h2>
+            <h2 class="section-title" data-translate="projects_title">Мої проекти</h2>
             <div class="projects-grid">
                 <div class="project-card">
                     <div class="project-info">
-                        <h3 class="project-title" data-translate="project1">Cozy House Slavsko</h3>
-                        <p class="project-description" data-translate="project1desc">Повноцінний сайт для будинку відпочинку у Славську, що поєднує привабливий дизайн з високою функціональністю та адаптивністю для будь-яких пристроїв.</p>
+                        <h3 class="project-title" data-translate="project1_title">Cozy House Slavsko</h3>
+                        <p class="project-description" data-translate="project1_description">
+                            Сайт для будинку відпочинку у Славську з адаптивним дизайном та простою навігацією. Реалізовано галерею, карту локації та форму зворотного зв'язку.
+                        </p>
                         <div class="project-links">
-                            <a href="https://cozyhouse-slavsko.com" class="btn btn-small" data-translate="liveDemo" target="_blank" rel="noopener noreferrer">Live Demo</a>
-                            <a href="https://github.com/nzbsky/newsitecozyhouse" class="btn btn-outline btn-small" data-translate="code" target="_blank" rel="noopener noreferrer">Code</a>
+                            <a href="https://cozyhouse-slavsko.com" class="btn btn-small" data-translate="live_demo">Live Demo</a>
+                            <a href="https://github.com/nzbsky/newsitecozyhouse" class="btn btn-outline btn-small" data-translate="code">Code</a>
                         </div>
                     </div>
                 </div>
                 
                 <div class="project-card">
                     <div class="project-info">
-                        <h3 class="project-title" data-translate="project2">Портфоліо (цей сайт)</h3>
-                        <p class="project-description" data-translate="project2desc">Сучасне та динамічне портфоліо, розроблене для демонстрації моїх навичок у Frontend розробці та UI/UX дизайні. Включає адаптивний дизайн та елегантні анімації.</p>
+                        <h3 class="project-title" data-translate="project2_title">Портфоліо (цей сайт)</h3>
+                        <p class="project-description" data-translate="project2_description">
+                            Сучасне портфоліо з анімаціями, темною темою та мультимовною підтримкою. Використано чисті HTML, CSS та JavaScript без фреймворків.
+                        </p>
                         <div class="project-links">
-                            <a href="#" class="btn btn-small" data-translate="liveDemo">Live Demo</a>
-                            <a href="https://github.com/nzbsky/nazarportfol" class="btn btn-outline btn-small" data-translate="code" target="_blank" rel="noopener noreferrer">Code</a>
+                            <a href="#" class="btn btn-small" data-translate="live_demo">Live Demo</a>
+                            <a href="https://github.com/nzbsky/nazarportfol" class="btn btn-outline btn-small" data-translate="code">Code</a>
                         </div>
                     </div>
                 </div>
                 
                 <div class="project-card">
                     <div class="project-info">
-                        <h3 class="project-title" data-translate="project3">Новий проект</h3>
-                        <p class="project-description" data-translate="project3desc">Зараз я активно працюю над новим проектом, який стане значним кроком у моєму розвитку. Слідкуйте за оновленнями!</p>
+                        <h3 class="project-title" data-translate="project3_title">Новий проект(в розробці)</h3>
+                        <p class="project-description" data-translate="project3_description">Додаток в розробці очікуйте новин</p>
                         <div class="project-links">
-                            <a href="#" class="btn btn-outline btn-small" data-translate="soon">Скоро</a>
+                            <a href="#" class="btn btn-outline btn-small" data-translate="coming_soon">Скоро</a>
                         </div>
                     </div>
                 </div>
@@ -540,7 +629,7 @@
     
     <section id="skills">
         <div class="container">
-            <h2 class="section-title" data-translate="skillsTitle">Навички</h2>
+            <h2 class="section-title" data-translate="skills_title">Навички</h2>
             <div class="skills-container">
                 <div class="skill">
                     <i class="fab fa-figma"></i> Figma
@@ -555,7 +644,7 @@
                     <i class="fab fa-js"></i> JavaScript
                 </div>
                 <div class="skill">
-                    <i class="fas fa-mobile-alt"></i> <span data-translate="responsiveDesign">Адаптивний дизайн</span>
+                    <i class="fas fa-mobile-alt"></i> <span data-translate="responsive_design">Адаптивний дизайн</span>
                 </div>
                 <div class="skill">
                     <i class="fas fa-paint-brush"></i> UI/UX Design
@@ -564,7 +653,10 @@
                     <i class="fab fa-git-alt"></i> Git
                 </div>
                 <div class="skill">
-                    <i class="fab fa-github"></i> GitHub
+                    <i class="fas fa-code-branch"></i> GitHub
+                </div>
+                <div class="skill">
+                    <i class="fas fa-search"></i> SEO Basics
                 </div>
             </div>
         </div>
@@ -572,8 +664,19 @@
     
     <footer>
         <div class="container">
-            <p class="footer-text" data-translate="footer">© 2023 Назар | Frontend Developer</p>
-            <p class="footer-contact" style="margin-top: 1rem;" data-translate="contact">Зв'яжіться зі мною через соціальні мережі</p>
+            <p class="footer-text" data-translate="copyright">© 2023 Назар | Frontend Developer</p>
+            <p class="footer-contact" style="margin-top: 1rem;" data-translate="contact_text">Зв'яжіться зі мною через соціальні мережі</p>
+            <div class="social-links" style="justify-content: center; margin-top: 1.5rem;">
+                <a href="https://t.me/nzbsky" class="btn btn-small">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="https://github.com/nzbsky" class="btn btn-outline btn-small">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://www.instagram.com/nazzar2010/" class="btn btn-small">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
         </div>
     </footer>
 
@@ -581,211 +684,153 @@
         // Language translations
         const translations = {
             uk: {
-                title: "Назар | Frontend Developer",
-                tagline: "Frontend Developer | UI/UX Enthusiast",
-                age: "15 років | Працюю з Figma, HTML, CSS, JavaScript",
-                aboutTitle: "Про мене",
-                about1: "Привіт! Я Назар, мені 15 років і я фронтенд розробник з України. Захоплююсь створенням сучасних веб-інтерфейсів та дизайном.",
-                about2: "Мій шлях у світ програмування розпочався з візуального дизайну у Figma. Це дозволяє мені створювати не лише функціональні, а й естетично привабливі сайти, де кожен піксель має значення.",
-                about3: "Мій перший великий проект - cozyhouse-slavsko.com, який я розробив повністю самостійно, від перших ескізів у Figma до фінального коду.",
-                educationTitle: "Освіта",
-                goiteensTitle: "GoITeens Academy",
-                goiteensDetails: "2023 - 2024 | Курс \"Frontend розробник\"",
-                goiteensDescription: "В GoITeens я здобув глибокі знання з HTML, CSS та JavaScript, навчився працювати з адаптивним дизайном, фреймворками та основами UI/UX. Це дало мені міцну базу для створення складних та інтерактивних веб-додатків. Практичний підхід академії дозволив мені реалізувати кілька цікавих проектів, що зміцнило мої навички.",
-                projectsTitle: "Мої проекти",
-                project1: "Cozy House Slavsko",
-                project1desc: "Повноцінний сайт для будинку відпочинку у Славську, що поєднує привабливий дизайн з високою функціональністю та адаптивністю для будь-яких пристроїв.",
-                project2: "Портфоліо (цей сайт)",
-                project2desc: "Сучасне та динамічне портфоліо, розроблене для демонстрації моїх навичок у Frontend розробці та UI/UX дизайні. Включає адаптивний дизайн та елегантні анімації.",
-                project3: "Новий проект",
-                project3desc: "Зараз я активно працюю над новим проектом, який стане значним кроком у моєму розвитку. Слідкуйте за оновленнями!",
-                skillsTitle: "Навички",
-                responsiveDesign: "Адаптивний дизайн",
-                footer: "© 2023 Назар | Frontend Developer",
-                contact: "Зв'яжіться зі мною через соціальні мережі",
-                liveDemo: "Live Demo",
+                about_title: "Про мене",
+                about_text1: "Привіт! Я Назар, мені 15 років і я фронтенд розробник з України. Захоплююсь створенням сучасних веб-інтерфейсів та дизайном.",
+                about_text2: "Почав свій шлях у програмуванні з візуального дизайну у Figma, що допомагає мені створювати не лише функціональні, а й естетичні сайти.",
+                about_text3: "Мій перший проект - cozyhouse-slavsko.com, який я розробив повністю самостійно, від дизайну до реалізації.",
+                about_text4: "Зараз активно вивчаю JavaScript та сучасні фреймворки, щоб створювати ще більш динамічні та інтерактивні веб-додатки.",
+                education_title: "Освіта",
+                education_school: "GoITeens - Школа програмування для підлітків",
+                education_period: "2022 - 2023 | Frontend Development",
+                education_description: "Під час навчання в GoITeens я освоїв основи веб-розробки, включаючи HTML, CSS та JavaScript. Навчався створювати сучасні, адаптивні сайти та працювати з Git. У рамках курсів виконав кілька практичних проектів, які допомогли закріпити отримані знання.",
+                projects_title: "Мої проекти",
+                project1_title: "Cozy House Slavsko",
+                project1_description: "Сайт для будинку відпочинку у Славську з адаптивним дизайном та простою навігацією. Реалізовано галерею, карту локації та форму зворотного зв'язку.",
+                project2_title: "Портфоліо (цей сайт)",
+                project2_description: "Сучасне портфоліо з анімаціями, темною темою та мультимовною підтримкою. Використано чисті HTML, CSS та JavaScript без фреймворків.",
+                project3_title: "Новий проект(в розробці)",
+                project3_description: "Додаток в розробці очікуйте новин",
+                skills_title: "Навички",
+                responsive_design: "Адаптивний дизайн",
+                live_demo: "Live Demo",
                 code: "Code",
-                soon: "Скоро"
+                coming_soon: "Скоро",
+                copyright: "© 2023 Назар | Frontend Developer",
+                contact_text: "Зв'яжіться зі мною через соціальні мережі"
             },
             en: {
-                title: "Nazar | Frontend Developer",
-                tagline: "Frontend Developer | UI/UX Enthusiast",
-                age: "15 years old | Working with Figma, HTML, CSS, JavaScript",
-                aboutTitle: "About Me",
-                about1: "Hello! I'm Nazar, a 15-year-old frontend developer from Ukraine. I'm passionate about creating modern web interfaces and design.",
-                about2: "My journey into programming began with visual design in Figma. This allows me to create not only functional but also aesthetically pleasing websites, where every pixel matters.",
-                about3: "My first major project is cozyhouse-slavsko.com, which I developed completely independently, from initial Figma sketches to the final code.",
-                educationTitle: "Education",
-                goiteensTitle: "GoITeens Academy",
-                goiteensDetails: "2023 - 2024 | \"Frontend Developer\" Course",
-                goiteensDescription: "At GoITeens, I gained in-depth knowledge of HTML, CSS, and JavaScript, and learned to work with responsive design, frameworks, and UI/UX fundamentals. This provided me with a strong foundation for building complex and interactive web applications. The academy's practical approach allowed me to complete several interesting projects, strengthening my skills.",
-                projectsTitle: "My Projects",
-                project1: "Cozy House Slavsko",
-                project1desc: "A full-fledged website for a vacation house in Slavsko, combining attractive design with high functionality and responsiveness for all devices.",
-                project2: "Portfolio (this site)",
-                project2desc: "A modern and dynamic portfolio, designed to showcase my skills in Frontend development and UI/UX design. Features responsive design and elegant animations.",
-                project3: "New Project",
-                project3desc: "I'm currently actively working on a new project that will be a significant step in my development. Stay tuned for updates!",
-                skillsTitle: "Skills",
-                responsiveDesign: "Responsive Design",
-                footer: "© 2023 Nazar | Frontend Developer",
-                contact: "Contact me via social networks",
-                liveDemo: "Live Demo",
+                about_title: "About Me",
+                about_text1: "Hello! I'm Nazar, a 15-year-old frontend developer from Ukraine. I'm passionate about creating modern web interfaces and design.",
+                about_text2: "I started my programming journey with visual design in Figma, which helps me create not only functional but also aesthetic websites.",
+                about_text3: "My first project is cozyhouse-slavsko.com, which I developed completely independently, from design to implementation.",
+                about_text4: "I'm currently actively learning JavaScript and modern frameworks to create even more dynamic and interactive web applications.",
+                education_title: "Education",
+                education_school: "GoITeens - Programming School for Teens",
+                education_period: "2022 - 2023 | Frontend Development",
+                education_description: "During my studies at GoITeens, I mastered the basics of web development, including HTML, CSS, and JavaScript. I learned to create modern, responsive websites and work with Git. As part of the courses, I completed several practical projects that helped consolidate my knowledge.",
+                projects_title: "My Projects",
+                project1_title: "Cozy House Slavsko",
+                project1_description: "A website for a vacation house in Slavsko with adaptive design and simple navigation. Features include a gallery, location map, and feedback form.",
+                project2_title: "Portfolio (this site)",
+                project2_description: "Modern portfolio with animations, dark theme, and multilingual support. Built with pure HTML, CSS, and JavaScript without frameworks.",
+                project3_title: "New Project (in development)",
+                project3_description: "App in development, stay tuned for updates",
+                skills_title: "Skills",
+                responsive_design: "Responsive Design",
+                live_demo: "Live Demo",
                 code: "Code",
-                soon: "Soon"
-            },
-            pl: {
-                title: "Nazar | Frontend Developer",
-                tagline: "Frontend Developer | Entuzjasta UI/UX",
-                age: "15 lat | Pracuję z Figmą, HTML, CSS, JavaScript",
-                aboutTitle: "O mnie",
-                about1: "Cześć! Jestem Nazar, mam 15 lat i jestem frontend developerem z Ukrainy. Pasjonuję się tworzeniem nowoczesnych interfejsów internetowych i designem.",
-                about2: "Moją podróż w świat programowania rozpocząłem od projektowania wizualnego w Figmie. Pozwala mi to tworzyć nie tylko funkcjonalne, ale także estetycznie atrakcyjne strony internetowe, gdzie każdy piksel ma znaczenie.",
-                about3: "Moim pierwszym dużym projektem jest cozyhouse-slavsko.com, który opracowałem całkowicie samodzielnie, od wstępnych szkiców w Figmie do końcowego kodu.",
-                educationTitle: "Edukacja",
-                goiteensTitle: "GoITeens Academy",
-                goiteensDetails: "2023 - 2024 | Kurs \"Frontend Developer\"",
-                goiteensDescription: "W GoITeens zdobyłem głęboką wiedzę z zakresu HTML, CSS i JavaScript, nauczyłem się pracować z responsywnym designem, frameworkami i podstawami UI/UX. Zapewniło mi to solidne podstawy do tworzenia złożonych i interaktywnych aplikacji internetowych. Praktyczne podejście akademii pozwoliło mi zrealizować kilka ciekawych projektów, wzmacniając moje umiejętności.",
-                projectsTitle: "Moje Projekty",
-                project1: "Cozy House Slavsko",
-                project1desc: "Pełnoprawna strona internetowa dla domu wakacyjnego w Slavsku, łącząca atrakcyjny design z wysoką funkcjonalnością i responsywnością dla wszystkich urządzeń.",
-                project2: "Portfolio (ta strona)",
-                project2desc: "Nowoczesne i dynamiczne portfolio, zaprojektowane w celu zaprezentowania moich umiejętności w rozwoju Frontend i projektowaniu UI/UX. Charakteryzuje się responsywnym designem i eleganckimi animacjami.",
-                project3: "Nowy Projekt",
-                project3desc: "Obecnie aktywnie pracuję nad nowym projektem, który będzie znaczącym krokiem w moim rozwoju. Bądź na bieżąco!",
-                skillsTitle: "Umiejętności",
-                responsiveDesign: "Responsywny design",
-                footer: "© 2023 Nazar | Frontend Developer",
-                contact: "Skontaktuj się ze mną przez sieci społecznościowe",
-                liveDemo: "Live Demo",
-                code: "Kod",
-                soon: "Wkrótce"
-            },
-            de: {
-                title: "Nazar | Frontend Developer",
-                tagline: "Frontend Developer | UI/UX Enthusiast",
-                age: "15 Jahre alt | Arbeite mit Figma, HTML, CSS, JavaScript",
-                aboutTitle: "Über mich",
-                about1: "Hallo! Ich bin Nazar, ein 15-jähriger Frontend-Entwickler aus der Ukraine. Ich begeistere mich für die Erstellung moderner Web-Oberflächen und Design.",
-                about2: "Mein Weg in die Programmierung begann mit visuellem Design in Figma. Dies ermöglicht es mir, nicht nur funktionale, sondern auch ästhetisch ansprechende Websites zu erstellen, bei denen jedes Pixel zählt.",
-                about3: "Mein erstes großes Projekt ist cozyhouse-slavsko.com, das ich komplett selbständig entwickelt habe, von den ersten Figma-Skizzen bis zum finalen Code.",
-                educationTitle: "Ausbildung",
-                goiteensTitle: "GoITeens Academy",
-                goiteensDetails: "2023 - 2024 | Kurs \"Frontend-Entwickler\"",
-                goiteensDescription: "Bei GoITeens habe ich fundierte Kenntnisse in HTML, CSS und JavaScript erworben und gelernt, mit responsivem Design, Frameworks und UI/UX-Grundlagen zu arbeiten. Dies gab mir eine solide Grundlage für die Entwicklung komplexer und interaktiver Webanwendungen. Der praktische Ansatz der Akademie ermöglichte es mir, mehrere interessante Projekte umzusetzen, was meine Fähigkeiten stärkte.",
-                projectsTitle: "Meine Projekte",
-                project1: "Cozy House Slavsko",
-                project1desc: "Eine vollwertige Website für ein Ferienhaus in Slavsko, die ansprechendes Design mit hoher Funktionalität und Responsivität für alle Geräte kombiniert.",
-                project2: "Portfolio (diese Seite)",
-                project2desc: "Ein modernes und dynamisches Portfolio, das meine Fähigkeiten in der Frontend-Entwicklung und im UI/UX-Design demonstriert. Mit responsivem Design und eleganten Animationen.",
-                project3: "Neues Projekt",
-                project3desc: "Ich arbeite derzeit aktiv an einem neuen Projekt, das ein bedeutender Schritt in meiner Entwicklung sein wird. Bleiben Sie dran für Updates!",
-                skillsTitle: "Fähigkeiten",
-                responsiveDesign: "Responsives Design",
-                footer: "© 2023 Nazar | Frontend Developer",
-                contact: "Kontaktieren Sie mich über soziale Netzwerke",
-                liveDemo: "Live Demo",
-                code: "Code",
-                soon: "Bald"
+                coming_soon: "Coming Soon",
+                copyright: "© 2023 Nazar | Frontend Developer",
+                contact_text: "Contact me via social networks"
             }
         };
 
         // Language switcher functionality
         document.addEventListener('DOMContentLoaded', function() {
-            const languageBtns = document.querySelectorAll('.language-btn');
+            const langButtons = document.querySelectorAll('.language-btn');
+            const elementsToTranslate = document.querySelectorAll('[data-translate]');
             
-            // Elements to translate using data-translate attribute
-            const elementsToTranslate = {};
-            document.querySelectorAll('[data-translate]').forEach(el => {
-                elementsToTranslate[el.dataset.translate] = el;
-            });
-
-            // Specific elements handled differently
-            elementsToTranslate['title'] = document.querySelector('title');
-            elementsToTranslate['age'] = document.querySelector('.age-info');
-            elementsToTranslate['about3'] = document.querySelectorAll('.about-text')[2];
-            elementsToTranslate['liveDemo'] = document.querySelectorAll('.project-links .btn:not(.btn-outline)');
-            elementsToTranslate['code'] = document.querySelectorAll('.project-links .btn-outline:not(:last-child)');
-            elementsToTranslate['soon'] = document.querySelector('.project-links .btn-outline:last-child');
-            elementsToTranslate['about1'] = document.querySelectorAll('.about-text')[0];
-            elementsToTranslate['about2'] = document.querySelectorAll('.about-text')[1];
-            elementsToMany = {
-                'project1': document.querySelectorAll('.project-title')[0],
-                'project1desc': document.querySelectorAll('.project-description')[0],
-                'project2': document.querySelectorAll('.project-title')[1],
-                'project2desc': document.querySelectorAll('.project-description')[1],
-                'project3': document.querySelectorAll('.project-title')[2],
-                'project3desc': document.querySelectorAll('.project-description')[2]
-            }
-
-            // Set default language
+            // Set initial language
             let currentLang = 'uk';
             
-            // Language button click handler
-            languageBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
+            // Function to change language
+            function changeLanguage(lang) {
+                currentLang = lang;
+                
+                // Update button states
+                langButtons.forEach(btn => {
+                    if (btn.dataset.lang === lang) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+                
+                // Update all translatable elements
+                elementsToTranslate.forEach(element => {
+                    const key = element.dataset.translate;
+                    if (translations[lang][key]) {
+                        element.textContent = translations[lang][key];
+                        
+                        // Special case for elements with HTML inside
+                        if (element.dataset.translate === 'about_text3') {
+                            element.innerHTML = `My first project is <a href="https://cozyhouse-slavsko.com" style="color: var(--primary); text-decoration: none;">cozyhouse-slavsko.com</a>, which I developed completely independently, from design to implementation.`;
+                        }
+                    }
+                });
+                
+                // Update typing effect text
+                const typingElement = document.querySelector('.typing-effect');
+                if (typingElement) {
+                    typingElement.textContent = lang === 'uk' 
+                        ? 'Frontend Developer | UI/UX Enthusiast' 
+                        : 'Frontend Developer | UI/UX Enthusiast';
+                    
+                    // Restart typing animation
+                    typingElement.style.animation = 'none';
+                    void typingElement.offsetWidth; // Trigger reflow
+                    typingElement.style.animation = 'typing 3.5s steps(40, end), blink-caret .75s step-end infinite';
+                }
+                
+                // Update age info
+                const ageInfo = document.querySelector('.age-info');
+                if (ageInfo) {
+                    ageInfo.textContent = lang === 'uk' 
+                        ? '15 років | Працюю з Figma, HTML, CSS, JavaScript' 
+                        : '15 years old | Working with Figma, HTML, CSS, JavaScript';
+                }
+            }
+            
+            // Add click event listeners to language buttons
+            langButtons.forEach(button => {
+                button.addEventListener('click', function() {
                     const lang = this.dataset.lang;
-                    currentLang = lang;
-                    
-                    // Update active button
-                    languageBtns.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Update content
-                    translatePage(lang);
+                    changeLanguage(lang);
                 });
             });
             
-            // Translate page function
-            function translatePage(lang) {
-                const translation = translations[lang];
+            // Particles animation
+            const particlesContainer = document.getElementById('particles');
+            if (particlesContainer) {
+                createParticles();
+            }
+            
+            function createParticles() {
+                const particleCount = 30;
                 
-                for (const key in elementsToTranslate) {
-                    const element = elementsToTranslate[key];
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
                     
-                    if (element) {
-                        if (key === 'liveDemo' || key === 'code' || key === 'soon') {
-                            // Handle buttons
-                            if (element.length) {
-                                element.forEach(el => {
-                                    if (key === 'soon' && el.classList.contains('btn-outline') && el.textContent.trim() === translations['uk'].soon) { // Specific check for the 'soon' button
-                                        el.textContent = translation[key];
-                                    } else if (key === 'code' && el.classList.contains('btn-outline')) {
-                                        el.textContent = translation[key];
-                                    } else if (key === 'liveDemo' && !el.classList.contains('btn-outline')) {
-                                        el.textContent = translation[key];
-                                    }
-                                });
-                            } else {
-                                element.textContent = translation[key];
-                            }
-                        } else if (key === 'about3') {
-                            const link = element.querySelector('a');
-                            if (link) {
-                                element.innerHTML = translation[key].replace('cozyhouse-slavsko.com', 
-                                    `<a href="https://cozyhouse-slavsko.com" style="color: var(--primary); text-decoration: none;" target="_blank" rel="noopener noreferrer">cozyhouse-slavsko.com</a>`);
-                            } else {
-                                element.textContent = translation[key];
-                            }
-                        } else if (key === 'title') {
-                            element.textContent = translation[key];
-                        } else {
-                            element.textContent = translation[key];
-                        }
-                    }
-                }
-
-                // Handle project titles and descriptions separately due to their multiple instances
-                for (const key in elementsToMany) {
-                    const element = elementsToMany[key];
-                    if (element) {
-                        element.textContent = translation[key];
-                    }
+                    // Random size
+                    const size = Math.random() * 5 + 1;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    
+                    // Random position
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+                    
+                    // Random opacity
+                    particle.style.opacity = Math.random() * 0.5 + 0.1;
+                    
+                    // Random animation
+                    const duration = Math.random() * 20 + 10;
+                    particle.style.animation = `float ${duration}s infinite ease-in-out`;
+                    
+                    particlesContainer.appendChild(particle);
                 }
             }
-
-            // Initial translation on page load
-            translatePage(currentLang);
         });
     </script>
 </body>
