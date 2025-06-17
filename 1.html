@@ -7,495 +7,503 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #6c5ce7;
-            --primary-dark: #5649c0;
-            --secondary: #00cec9;
-            --dark: #2d3436;
-            --light: #f5f6fa;
-            --gray: #636e72;
-            --success: #00b894;
-            --danger: #d63031;
-            --warning: #fdcb6e;
-            
-            --bg-color: #f9f9f9;
-            --text-color: #333;
-            --card-bg: #fff;
-            --header-bg: linear-gradient(135deg, #6c5ce7 0%, #00cec9 100%);
-            
-            --shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            --shadow-hover: 0 15px 30px rgba(0, 0, 0, 0.15);
-            --transition: all 0.3s ease;
-            
-            --border-radius: 12px;
-            --border-radius-sm: 6px;
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --neon-blue: #0af;
+            --neon-pink: #f0f;
         }
-
-        [data-theme="dark"] {
-            --bg-color: #1a1a2e;
-            --text-color: #f1f1f1;
-            --card-bg: #16213e;
-            --header-bg: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-            --shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            --shadow-hover: 0 15px 30px rgba(0, 0, 0, 0.4);
-        }
-
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg);
+            color: var(--light);
             line-height: 1.6;
-            transition: var(--transition);
             overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0, 170, 255, 0.15) 0%, transparent 30%),
+                radial-gradient(circle at 80% 70%, rgba(255, 0, 255, 0.15) 0%, transparent 30%);
         }
-
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(0, 15px); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--primary) }
+        }
+        
         .container {
-            width: 100%;
+            width: 90%;
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
-
-        /* Language Switcher */
+        
+        /* Language switcher styles */
         .language-switcher {
             position: fixed;
             top: 20px;
             right: 20px;
             z-index: 1000;
-            display: flex;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--card-bg);
+            border-radius: 30px;
+            padding: 5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            padding: 8px;
-            border-radius: 50px;
-            box-shadow: var(--shadow);
         }
-
+        
         .language-btn {
-            width: 40px;
-            height: 40px;
+            background: none;
             border: none;
-            border-radius: 50%;
-            background: transparent;
-            color: white;
-            font-weight: bold;
+            color: var(--gray);
+            padding: 8px 12px;
+            border-radius: 20px;
             cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
         }
-
+        
         .language-btn.active {
-            background: white;
-            color: var(--primary);
+            background: var(--primary);
+            color: white;
         }
-
-        /* Header */
+        
+        .language-btn:hover:not(.active) {
+            color: var(--light);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
         header {
-            position: relative;
             min-height: 100vh;
             display: flex;
             align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 80px 0;
+            position: relative;
             overflow: hidden;
-            background: var(--header-bg);
+        }
+        
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to top, var(--bg), transparent);
+            z-index: 1;
+        }
+        
+        .hero {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .profile-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--primary);
+            margin-bottom: 1.5rem;
+            box-shadow: 
+                0 0 30px rgba(99, 102, 241, 0.3),
+                0 0 60px rgba(99, 102, 241, 0.2);
+            transition: all 0.3s ease;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .profile-img:hover {
+            animation: pulse 1s ease infinite;
+            box-shadow: 
+                0 0 50px rgba(99, 102, 241, 0.5),
+                0 0 80px rgba(99, 102, 241, 0.3);
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, var(--primary), #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+        
+        .tagline {
+            font-size: 1.3rem;
+            color: var(--light);
+            margin-bottom: 1rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 500;
+        }
+        
+        .typing-effect {
+            display: inline-block;
+            overflow: hidden;
+            border-right: 3px solid var(--primary);
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: 1px;
+            animation: 
+                typing 3.5s steps(40, end),
+                blink-caret .75s step-end infinite;
+        }
+        
+        .age-info {
+            font-size: 1.1rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.8rem 1.8rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
             color: white;
         }
-
+        
+        .btn-small {
+            padding: 0.5rem 1.2rem;
+            font-size: 0.9rem;
+        }
+        
+        section {
+            padding: 6rem 0;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(99, 102, 241, 0.1), transparent);
+            opacity: 0;
+            transition: 0.5s;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+        
+        .project-card:hover::before {
+            opacity: 1;
+        }
+        
+        .project-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .project-card:hover .project-img {
+            transform: scale(1.05);
+        }
+        
+        .project-info {
+            padding: 1.8rem;
+        }
+        
+        .project-title {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            color: var(--light);
+        }
+        
+        .project-description {
+            color: var(--gray);
+            margin-bottom: 1.8rem;
+            line-height: 1.7;
+        }
+        
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .skill {
+            background: var(--card-bg);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .skill:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+            background: var(--primary);
+            color: white;
+        }
+        
+        .education {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .education:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+        
+        .education-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .education-period {
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .education-description {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            background: var(--card-bg);
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .footer-text {
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Анімація фону */
         .bg-animation {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            z-index: 0;
             overflow: hidden;
-            z-index: 1;
         }
-
+        
         .bg-circle {
             position: absolute;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            animation: float 15s infinite ease-in-out;
+            filter: blur(60px);
+            opacity: 0.15;
         }
-
+        
         .circle-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: -100px;
+            left: -100px;
+            animation: float 8s infinite ease-in-out;
+        }
+        
+        .circle-2 {
             width: 300px;
             height: 300px;
-            top: 20%;
-            left: 10%;
-            animation-delay: 0s;
+            background: #a855f7;
+            bottom: -50px;
+            right: -50px;
+            animation: float 10s infinite ease-in-out reverse;
         }
-
-        .circle-2 {
-            width: 500px;
-            height: 500px;
-            bottom: -100px;
-            right: -100px;
-            animation-delay: 2s;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0) rotate(0deg);
-            }
-            50% {
-                transform: translateY(-50px) rotate(5deg);
-            }
-        }
-
+        
+        /* Particles animation */
         .particles {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 2;
-        }
-
-        .hero {
-            position: relative;
-            z-index: 3;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .profile-img {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 5px solid rgba(255, 255, 255, 0.2);
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transition: var(--transition);
-        }
-
-        .profile-img:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            margin-bottom: 15px;
-            font-weight: 700;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .tagline {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            opacity: 0.9;
-        }
-
-        .age-info {
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            opacity: 0.8;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px 24px;
-            background: white;
-            color: var(--primary);
-            border: none;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
-            margin: 0 10px 10px 0;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.4);
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-            box-shadow: none;
-        }
-
-        .btn-outline:hover {
-            background: white;
-            color: var(--primary);
-        }
-
-        .btn-small {
-            padding: 8px 16px;
-            font-size: 0.9rem;
-        }
-
-        .social-links {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 30px;
-        }
-
-        /* Sections */
-        section {
-            padding: 80px 0;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 60px;
-            position: relative;
-            color: var(--primary);
-        }
-
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 4px;
-            background: var(--secondary);
-            margin: 15px auto 0;
-            border-radius: 2px;
-        }
-
-        /* About */
-        .about-text {
-            margin-bottom: 1.5rem;
-            font-size: 1.1rem;
-            text-align: center;
-        }
-
-        .about-text a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
-        }
-
-        .about-text a:hover {
-            text-decoration: underline;
-        }
-
-        /* Education */
-        .education {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            max-width: 800px;
-            margin: 0 auto;
-            transition: var(--transition);
-        }
-
-        .education:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .education-title {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .education-period {
-            color: var(--gray);
-            margin-bottom: 15px;
-            font-style: italic;
-        }
-
-        .education-description {
-            line-height: 1.7;
-        }
-
-        /* Projects */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .project-card {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
+            z-index: 0;
             overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            position: relative;
         }
-
-        .project-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .project-info {
-            padding: 25px;
-        }
-
-        .project-title {
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-            color: var(--primary);
-        }
-
-        .project-description {
-            margin-bottom: 20px;
-            color: var(--gray);
-        }
-
-        .project-links {
-            display: flex;
-            gap: 10px;
-        }
-
-        /* Skills */
-        .skills-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .skill {
-            background: var(--card-bg);
-            padding: 15px 25px;
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 500;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-        }
-
-        .skill:hover {
-            transform: translateY(-5px);
-            background: var(--primary);
-            color: white;
-            box-shadow: var(--shadow-hover);
-        }
-
-        .skill i {
-            font-size: 1.2rem;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--card-bg);
-            padding: 40px 0;
-            text-align: center;
-        }
-
-        .footer-text {
-            font-size: 1rem;
-            opacity: 0.8;
-        }
-
-        .footer-contact {
-            font-size: 1.1rem;
-            margin-bottom: 20px;
-        }
-
-        /* Typing Effect */
-        .typing-effect {
-            display: inline-block;
-            position: relative;
-        }
-
-        .typing-effect::after {
-            content: '|';
+        
+        .particle {
             position: absolute;
-            right: -8px;
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        /* Theme Toggle */
-        .theme-toggle {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
+            background: rgba(255, 255, 255, 0.5);
             border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            transition: var(--transition);
+            pointer-events: none;
         }
-
-        .theme-toggle:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Responsive */
+        
+        /* Адаптивність */
         @media (max-width: 768px) {
             h1 {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
             }
             
             .tagline {
-                font-size: 1.2rem;
+                font-size: 1.1rem;
             }
             
             .projects-grid {
                 grid-template-columns: 1fr;
             }
             
-            .section-title {
-                font-size: 2rem;
+            section {
+                padding: 4rem 0;
             }
-        }
-
-        @media (max-width: 480px) {
-            .btn {
-                padding: 10px 20px;
-                font-size: 0.9rem;
+            
+            .language-switcher {
+                top: 10px;
+                right: 10px;
+            }
+            
+            .language-btn {
+                padding: 6px 10px;
+                font-size: 0.8rem;
             }
             
             .profile-img {
-                width: 150px;
-                height: 150px;
-            }
-            
-            h1 {
-                font-size: 2rem;
+                width: 160px;
+                height: 160px;
             }
         }
     </style>
@@ -505,10 +513,6 @@
         <button class="language-btn active" data-lang="uk">UA</button>
         <button class="language-btn" data-lang="en">EN</button>
     </div>
-    
-    <button class="theme-toggle" id="themeToggle">
-        <i class="fas fa-moon"></i>
-    </button>
     
     <header>
         <div class="bg-animation">
@@ -520,19 +524,19 @@
         <div class="container">
             <div class="hero">
                 <img src="./myfoto.jpg" alt="Назар" class="profile-img">
-                <h1 data-translate="name">Назар</h1>
-                <p class="tagline"><span class="typing-effect" data-translate="tagline">Frontend Developer | UI/UX Enthusiast</span></p>
-                <p class="age-info" data-translate="age_info">15 років | Працюю з Figma, HTML, CSS, JavaScript</p>
+                <h1>Назар</h1>
+                <p class="tagline"><span class="typing-effect">Frontend Developer | UI/UX Enthusiast</span></p>
+                <p class="age-info">15 років | Працюю з Figma, HTML, CSS, JavaScript</p>
                 
                 <div class="social-links">
                     <a href="https://t.me/nzbsky" class="btn">
-                        <i class="fab fa-telegram"></i> <span data-translate="telegram">Telegram</span>
+                        <i class="fab fa-telegram"></i> Telegram
                     </a>
                     <a href="https://github.com/nzbsky" class="btn btn-outline">
-                        <i class="fab fa-github"></i> <span data-translate="github">GitHub</span>
+                        <i class="fab fa-github"></i> GitHub
                     </a>
                     <a href="https://www.instagram.com/nazzar2010/" class="btn">
-                        <i class="fab fa-instagram"></i> <span data-translate="instagram">Instagram</span>
+                        <i class="fab fa-instagram"></i> Instagram
                     </a>
                 </div>
             </div>
@@ -677,15 +681,9 @@
     </footer>
 
     <script>
-        // Language switcher
+        // Language translations
         const translations = {
             uk: {
-                name: "Назар",
-                tagline: "Frontend Developer | UI/UX Enthusiast",
-                age_info: "15 років | Працюю з Figma, HTML, CSS, JavaScript",
-                telegram: "Telegram",
-                github: "GitHub",
-                instagram: "Instagram",
                 about_title: "Про мене",
                 about_text1: "Привіт! Я Назар, мені 15 років і я фронтенд розробник з України. Захоплююсь створенням сучасних веб-інтерфейсів та дизайном.",
                 about_text2: "Почав свій шлях у програмуванні з візуального дизайну у Figma, що допомагає мені створювати не лише функціональні, а й естетичні сайти.",
@@ -711,25 +709,19 @@
                 contact_text: "Зв'яжіться зі мною через соціальні мережі"
             },
             en: {
-                name: "Nazar",
-                tagline: "Frontend Developer | UI/UX Enthusiast",
-                age_info: "15 years old | Working with Figma, HTML, CSS, JavaScript",
-                telegram: "Telegram",
-                github: "GitHub",
-                instagram: "Instagram",
                 about_title: "About Me",
                 about_text1: "Hello! I'm Nazar, a 15-year-old frontend developer from Ukraine. I'm passionate about creating modern web interfaces and design.",
                 about_text2: "I started my programming journey with visual design in Figma, which helps me create not only functional but also aesthetic websites.",
                 about_text3: "My first project is cozyhouse-slavsko.com, which I developed completely independently, from design to implementation.",
-                about_text4: "Currently, I'm actively learning JavaScript and modern frameworks to create even more dynamic and interactive web applications.",
+                about_text4: "I'm currently actively learning JavaScript and modern frameworks to create even more dynamic and interactive web applications.",
                 education_title: "Education",
                 education_school: "GoITeens - Programming School for Teens",
                 education_period: "2022 - 2023 | Frontend Development",
-                education_description: "During my studies at GoITeens, I mastered the basics of web development, including HTML, CSS, and JavaScript. Learned to create modern, responsive websites and work with Git. Completed several practical projects as part of the courses to reinforce the knowledge gained.",
+                education_description: "During my studies at GoITeens, I mastered the basics of web development, including HTML, CSS, and JavaScript. I learned to create modern, responsive websites and work with Git. As part of the courses, I completed several practical projects that helped consolidate my knowledge.",
                 projects_title: "My Projects",
                 project1_title: "Cozy House Slavsko",
-                project1_description: "Website for a vacation house in Slavsko with adaptive design and simple navigation. Implemented a gallery, location map, and feedback form.",
-                project2_title: "Portfolio (this website)",
+                project1_description: "A website for a vacation house in Slavsko with adaptive design and simple navigation. Features include a gallery, location map, and feedback form.",
+                project2_title: "Portfolio (this site)",
                 project2_description: "Modern portfolio with animations, dark theme, and multilingual support. Built with pure HTML, CSS, and JavaScript without frameworks.",
                 project3_title: "New Project (in development)",
                 project3_description: "App in development, stay tuned for updates",
@@ -743,132 +735,102 @@
             }
         };
 
-        const languageBtns = document.querySelectorAll('.language-btn');
-        let currentLang = 'uk';
-
-        languageBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const lang = btn.dataset.lang;
-                if (lang === currentLang) return;
-                
+        // Language switcher functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const langButtons = document.querySelectorAll('.language-btn');
+            const elementsToTranslate = document.querySelectorAll('[data-translate]');
+            
+            // Set initial language
+            let currentLang = 'uk';
+            
+            // Function to change language
+            function changeLanguage(lang) {
                 currentLang = lang;
-                translatePage(lang);
                 
-                languageBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
-        });
-
-        function translatePage(lang) {
-            const elements = document.querySelectorAll('[data-translate]');
-            elements.forEach(el => {
-                const key = el.dataset.translate;
-                if (translations[lang][key]) {
-                    el.textContent = translations[lang][key];
+                // Update button states
+                langButtons.forEach(btn => {
+                    if (btn.dataset.lang === lang) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+                
+                // Update all translatable elements
+                elementsToTranslate.forEach(element => {
+                    const key = element.dataset.translate;
+                    if (translations[lang][key]) {
+                        element.textContent = translations[lang][key];
+                        
+                        // Special case for elements with HTML inside
+                        if (element.dataset.translate === 'about_text3') {
+                            element.innerHTML = `My first project is <a href="https://cozyhouse-slavsko.com" style="color: var(--primary); text-decoration: none;">cozyhouse-slavsko.com</a>, which I developed completely independently, from design to implementation.`;
+                        }
+                    }
+                });
+                
+                // Update typing effect text
+                const typingElement = document.querySelector('.typing-effect');
+                if (typingElement) {
+                    typingElement.textContent = lang === 'uk' 
+                        ? 'Frontend Developer | UI/UX Enthusiast' 
+                        : 'Frontend Developer | UI/UX Enthusiast';
+                    
+                    // Restart typing animation
+                    typingElement.style.animation = 'none';
+                    void typingElement.offsetWidth; // Trigger reflow
+                    typingElement.style.animation = 'typing 3.5s steps(40, end), blink-caret .75s step-end infinite';
                 }
+                
+                // Update age info
+                const ageInfo = document.querySelector('.age-info');
+                if (ageInfo) {
+                    ageInfo.textContent = lang === 'uk' 
+                        ? '15 років | Працюю з Figma, HTML, CSS, JavaScript' 
+                        : '15 years old | Working with Figma, HTML, CSS, JavaScript';
+                }
+            }
+            
+            // Add click event listeners to language buttons
+            langButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const lang = this.dataset.lang;
+                    changeLanguage(lang);
+                });
             });
-        }
-
-        // Theme toggle
-        const themeToggle = document.getElementById('themeToggle');
-        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-        
-        // Check for saved theme or prefered scheme
-        const currentTheme = localStorage.getItem('theme');
-        if (currentTheme === 'dark' || (!currentTheme && prefersDarkScheme.matches)) {
-            document.body.setAttribute('data-theme', 'dark');
-            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        }
-        
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = document.body.getAttribute('data-theme');
-            if (currentTheme === 'dark') {
-                document.body.removeAttribute('data-theme');
-                localStorage.setItem('theme', 'light');
-                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-            } else {
-                document.body.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-            }
-        });
-
-        // Particles animation
-        function initParticles() {
+            
+            // Particles animation
             const particlesContainer = document.getElementById('particles');
-            const particleCount = 30;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                
-                // Random properties
-                const size = Math.random() * 5 + 2;
-                const posX = Math.random() * 100;
-                const posY = Math.random() * 100;
-                const delay = Math.random() * 10;
-                const duration = Math.random() * 20 + 10;
-                const opacity = Math.random() * 0.5 + 0.1;
-                
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.left = `${posX}%`;
-                particle.style.top = `${posY}%`;
-                particle.style.animationDelay = `${delay}s`;
-                particle.style.animationDuration = `${duration}s`;
-                particle.style.opacity = opacity;
-                particle.style.backgroundColor = 'white';
-                particle.style.borderRadius = '50%';
-                particle.style.position = 'absolute';
-                particle.style.animation = `float ${duration}s infinite ease-in-out`;
-                
-                particlesContainer.appendChild(particle);
-            }
-        }
-
-        // Typing effect
-        const phrases = [
-            "Frontend Developer | UI/UX Enthusiast",
-            "Web Designer | Creative Thinker",
-            "JavaScript Lover | Problem Solver"
-        ];
-        
-        let currentPhrase = 0;
-        let currentChar = 0;
-        let isDeleting = false;
-        let isEnd = false;
-        
-        function type() {
-            const typingElement = document.querySelector('.typing-effect');
-            const currentText = typingElement.textContent;
-            const targetPhrase = phrases[currentPhrase];
-            
-            if (isDeleting) {
-                typingElement.textContent = targetPhrase.substring(0, currentChar - 1);
-                currentChar--;
-            } else {
-                typingElement.textContent = targetPhrase.substring(0, currentChar + 1);
-                currentChar++;
+            if (particlesContainer) {
+                createParticles();
             }
             
-            if (!isDeleting && currentChar === targetPhrase.length) {
-                isEnd = true;
-                isDeleting = true;
-                setTimeout(type, 1500);
-            } else if (isDeleting && currentChar === 0) {
-                isDeleting = false;
-                currentPhrase = (currentPhrase + 1) % phrases.length;
-                setTimeout(type, 500);
-            } else {
-                const speed = isDeleting ? 50 : 100;
-                setTimeout(type, speed);
+            function createParticles() {
+                const particleCount = 30;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    
+                    // Random size
+                    const size = Math.random() * 5 + 1;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    
+                    // Random position
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+                    
+                    // Random opacity
+                    particle.style.opacity = Math.random() * 0.5 + 0.1;
+                    
+                    // Random animation
+                    const duration = Math.random() * 20 + 10;
+                    particle.style.animation = `float ${duration}s infinite ease-in-out`;
+                    
+                    particlesContainer.appendChild(particle);
+                }
             }
-        }
-        
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            initParticles();
-            setTimeout(type, 1000);
         });
     </script>
 </body>
